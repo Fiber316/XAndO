@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class Board {
     private char[][] board;
     private int boardSize;
+    private IOController ioController = new IOController();
 
     public Board(int boardSize) {
         this.boardSize = boardSize;
@@ -35,24 +36,7 @@ public class Board {
     }
 
     public void printBoard() {
-        System.out.print("   ");
-
-        for (int column = 0; column < boardSize; column++) {
-            System.out.print(" " + (char) ('A' + column));
-        }
-        System.out.println();
-
-        for (int row = 0; row < boardSize; row++) {
-            if (row < 9) {
-                System.out.print((row + 1) + "  |");
-            } else {
-                System.out.print((row + 1) + " |");
-            }
-            for (int column = 0; column < boardSize; column++) {
-                System.out.print(board[row][column] + "|");
-            }
-            System.out.println();
-        }
+        ioController.printBoard(board, boardSize);
     }
 
     public char[][] getBoard() {

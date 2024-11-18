@@ -11,37 +11,48 @@ public class IOController {
                 1 - uloz 3 pod rzad na polu 3/3
                 2 - uloz 5 pod rzad na polu 10/10""");
         char mode;
-        while (true) {
+        do {
             mode = scanner.next().charAt(0);
             if (mode == '1') {
                 game.setBoardSize(3);
                 game.setWinCondition(3);
-                break;
-            }
-            if (mode == '2') {
+            } else if (mode == '2') {
                 game.setBoardSize(10);
                 game.setWinCondition(5);
-                break;
+            } else {
+                System.out.println("Zly input - wybierz ponownie");
             }
-            System.out.println("Zly input - wybierz ponownie");
-
-        }
+        } while (mode != '1' && mode != '2');
     }
 
     public char selectplayerOrCPU() {
         char playerOrCPU;
         System.out.println("""
                 Gra na dwoch graczy czy przeciwko komputerowi?
-                1 - na dwoch graczy
-                2 - przeciwko CPU""");
-        while (true) {
+                1 - gra na dwoch graczy
+                2 - przeciwko komputerowi""");
+        do {
             playerOrCPU = scanner.next().charAt(0);
-            if (playerOrCPU == '1' || playerOrCPU == '2') {
-                return playerOrCPU;
-            } else {
+            if (playerOrCPU != '1' && playerOrCPU != '2') {
                 System.out.println("Zly input - wybierz ponownie");
             }
-        }
+        } while (playerOrCPU != '1' && playerOrCPU != '2');
+        return playerOrCPU;
+    }
+
+    public int selectDifficulty() {
+        int difficulty;
+        System.out.println("""
+                Wybierz poziom trudnosci:
+                1 - latwy
+                2 - trudny""");
+        do {
+            difficulty = scanner.nextInt();
+            if (difficulty != 1 && difficulty != 2) {
+                System.out.println("Zly input - wybierz ponownie");
+            }
+        } while (difficulty != 1 && difficulty != 2);
+        return difficulty;
     }
 
     public String getMoveInput(char mark) {
@@ -55,5 +66,30 @@ public class IOController {
 
     public void drawMessage() {
         System.out.println("Remis");
+    }
+
+    public void printBoard(char[][] board, int boardSize) {
+        System.out.print("   ");
+
+        for (int column = 0; column < boardSize; column++) {
+            System.out.print(" " + (char) ('A' + column));
+        }
+        System.out.println();
+
+        for (int row = 0; row < boardSize; row++) {
+            if (row < 9) {
+                System.out.print((row + 1) + "  |");
+            } else {
+                System.out.print((row + 1) + " |");
+            }
+            for (int column = 0; column < boardSize; column++) {
+                System.out.print(board[row][column] + "|");
+            }
+            System.out.println();
+        }
+    }
+
+    public void invalidMoveMessage() {
+        System.out.println("Nieprawidlowy ruch");
     }
 }

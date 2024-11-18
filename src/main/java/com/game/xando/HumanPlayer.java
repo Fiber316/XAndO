@@ -9,16 +9,16 @@ class HumanPlayer extends Player {
     }
 
     public void makeMove(Board board) {
-        while (true) {
-            String move = ioController.getMoveInput(getMark());
-            int column = move.charAt(0) - 'A';
-            int row = Integer.parseInt(move.substring(1)) - 1;
+        int row, column;
+        String move;
+        do {
+            move = ioController.getMoveInput(getMark());
+            column = move.charAt(0) - 'A';
+            row = Integer.parseInt(move.substring(1)) - 1;
 
-            if (board.placeMark(row, column, getMark())) {
-                break;
-            } else {
-                System.out.println("Nieprawidlowy ruch");
+            if (!board.placeMark(row, column, getMark())) {
+                ioController.invalidMoveMessage();
             }
-        }
+        } while (!board.placeMark(row, column, getMark()));
     }
 }

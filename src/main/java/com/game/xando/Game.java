@@ -7,31 +7,29 @@ public class Game {
     private int boardSize;
     private IOController ioController;
     private int winCondition;
+    private int difficultyLevel;
 
-    public void setBoardSize(int size) {
-        this.boardSize = size;
-    }
 
-    public void setWinCondition(int winCondition) {
-        this.winCondition = winCondition;
-    }
 
-    public Game() {
-        ioController = new IOController();
-    }
 
     public void start() {
+        ioController = new IOController();
+
         ioController.selectGameMode(this);
 
         board = new Board(boardSize);
 
         char playerOrCPU = ioController.selectplayerOrCPU();
 
+        if (playerOrCPU == '2') {
+            int difficultyLevel = ioController.selectDifficulty();
+        }
+
         player1 = new HumanPlayer('X', ioController);
         if (playerOrCPU == '1') {
             player2 = new HumanPlayer('O', ioController);
         } else if (playerOrCPU == '2') {
-            player2 = new ComputerPlayer('O');
+            player2 = new ComputerPlayer('O', difficultyLevel);
         }
 
         playGame();
@@ -141,6 +139,14 @@ public class Game {
             }
         }
         return false;
+    }
+
+    public void setBoardSize(int size) {
+        this.boardSize = size;
+    }
+
+    public void setWinCondition(int winCondition) {
+        this.winCondition = winCondition;
     }
 
 }
