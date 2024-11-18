@@ -1,6 +1,9 @@
 package com.game.xando;
 
 public class Game {
+    private static final char PLAYER_1_MARK = 'X';
+    private static final char PLAYER_2_MARK = 'O';
+
     Board board;
     private Player player1;
     private Player player2;
@@ -22,14 +25,14 @@ public class Game {
         char playerOrCPU = ioController.selectplayerOrCPU();
 
         if (playerOrCPU == '2') {
-            int difficultyLevel = ioController.selectDifficulty();
+            difficultyLevel = ioController.selectDifficulty();
         }
 
-        player1 = new HumanPlayer('X', ioController);
+        player1 = new HumanPlayer(PLAYER_1_MARK, ioController);
         if (playerOrCPU == '1') {
-            player2 = new HumanPlayer('O', ioController);
+            player2 = new HumanPlayer(PLAYER_2_MARK, ioController);
         } else if (playerOrCPU == '2') {
-            player2 = new ComputerPlayer('O', difficultyLevel);
+            player2 = new ComputerPlayer(PLAYER_2_MARK, ioController, difficultyLevel);
         }
 
         playGame();
@@ -49,7 +52,7 @@ public class Game {
                 ioController.drawMessage();
                 break;
             }
-            currentPlayer = (currentPlayer == player1) ? player2 : player1;
+            currentPlayer = (currentPlayer.equals(player1)) ? player2 : player1;
         }
     }
 

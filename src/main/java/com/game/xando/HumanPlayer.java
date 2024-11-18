@@ -11,14 +11,16 @@ class HumanPlayer extends Player {
     public void makeMove(Board board) {
         int row, column;
         String move;
+        boolean validMove;
         do {
             move = ioController.getMoveInput(getMark());
             column = move.charAt(0) - 'A';
             row = Integer.parseInt(move.substring(1)) - 1;
 
-            if (!board.placeMark(row, column, getMark())) {
+            validMove = board.placeMark(row, column, getMark());
+            if (!validMove) {
                 ioController.invalidMoveMessage();
             }
-        } while (!board.placeMark(row, column, getMark()));
+        } while (!validMove);
     }
 }

@@ -6,10 +6,15 @@ import java.util.List;
 
 class ComputerPlayer extends Player {
 
+    private static final Random RANDOM = new Random();
+
+    private IOController ioController;
+
     private int difficultyLevel;
 
-    public ComputerPlayer(char mark, int difficultyLevel) {
+    public ComputerPlayer(char mark, IOController ioController, int difficultyLevel) {
         super(mark);
+        this.ioController = ioController;
         this.difficultyLevel = difficultyLevel;
     }
 
@@ -28,10 +33,9 @@ class ComputerPlayer extends Player {
             }
 
             if (!emptySpaces.isEmpty()) {
-                Random random = new Random();
-                int[] randomFreeSpace = emptySpaces.get(random.nextInt(emptySpaces.size()));
+                int[] randomFreeSpace = emptySpaces.get(RANDOM.nextInt(emptySpaces.size()));
                 board.placeMark(randomFreeSpace[0], randomFreeSpace[1], getMark());
-                System.out.println("Znak \"" + getMark() + "\" zagrany na koordynatach " + (char) ('A' + randomFreeSpace[1]) + (randomFreeSpace[0] + 1));
+                ioController.computerMoveMessage(getMark(),(char) ('A' + randomFreeSpace[1]), randomFreeSpace[0] + 1);
             }
 
         }

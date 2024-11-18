@@ -60,6 +60,11 @@ public class IOController {
         return scanner.next();
     }
 
+    public void computerMoveMessage(char mark, char column, int row) {
+        System.out.println("Znak \"" + mark + "\" zagrany na koordynatach " + column + row);
+
+    }
+
     public void winnerMessage(char mark) {
         System.out.println(mark + " wygral");
     }
