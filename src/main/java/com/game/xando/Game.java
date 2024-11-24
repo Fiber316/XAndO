@@ -1,28 +1,36 @@
 package com.game.xando;
 
+import java.io.*;
+
 public class Game {
     private static final char PLAYER_1_MARK = 'X';
     private static final char PLAYER_2_MARK = 'O';
 
+
     Board board;
-    private Player player1;
-    private Player player2;
+    Player player1;
+    Player player2;
+    char playerOrCPU;
     private int boardSize;
-    private IOController ioController;
+    IOController ioController;
     private int winCondition;
-    private int difficultyLevel;
-
-
-
+    private char difficultyLevel;
+    private Player currentPlayer;
+    public File savedGameFile = new File("savedgame.txt");
 
     public void start() {
         ioController = new IOController();
 
+        if (ioController.askToLoadGame()) {
+            loadGame(savedGameFile);
+            playGame();
+        }
+
         ioController.selectGameMode(this);
 
-        board = new Board(boardSize);
+        board = new Board(boardSize, winCondition);
 
-        char playerOrCPU = ioController.selectplayerOrCPU();
+        playerOrCPU = ioController.selectplayerOrCPU();
 
         if (playerOrCPU == '2') {
             difficultyLevel = ioController.selectDifficulty();
@@ -43,7 +51,7 @@ public class Game {
         while (true) {
             board.printBoard();
             currentPlayer.makeMove(board);
-            if (checkWin(currentPlayer.getMark())) {
+            if (board.checkWin(currentPlayer.getMark())) {
                 board.printBoard();
                 ioController.winnerMessage(currentPlayer.getMark());
                 break;
@@ -56,92 +64,41 @@ public class Game {
         }
     }
 
-    boolean checkWin(char mark) {
-        return checkRows(mark) || checkColumns(mark) || checkDiagonalsToBottomRight(mark) || checkDiagonalsToBottomLeft(mark);
-    }
+    public void saveGame(File savedGameFile) {
+        try {
+            FileOutputStream fileStream = new FileOutputStream(savedGameFile);
+            ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
+            objectStream.writeObject(boardSize);
+            objectStream.writeObject(winCondition);
+            objectStream.writeObject(difficultyLevel);
+            objectStream.writeObject(board);
+            objectStream.writeObject(currentPlayer);
+            objectStream.writeObject(playerOrCPU);
 
-    private boolean checkRows(char mark) {
-        char[][] boardCheck = board.getBoard();
-        for (int row = 0; row < boardCheck.length; row++) {
-            int count = 0;
-            for (int column = 0; column < boardCheck[row].length; column++) {
-                if (boardCheck[row][column] == mark) {
-                    count++;
-                    if (count == winCondition) {
-                        return true;
-                    }
-                } else {
-                    count = 0;
-                }
-            }
+            objectStream.close();
+            fileStream.close();
+            ioController.saveGameSuccessMessage();
+        } catch (Exception e) {
+            ioController.saveGameErrorMessage();
         }
-        return false;
     }
+    public void loadGame(File savedGameFile)  {
+        try {
+            FileInputStream fileStream = new FileInputStream(savedGameFile);
+            ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+            boardSize = (Integer) objectStream.readObject();
+            winCondition = (Integer) objectStream.readObject();
+            difficultyLevel = (Character) objectStream.readObject();
+            board = (Board) objectStream.readObject();
+            currentPlayer = (Player) objectStream.readObject();
+            playerOrCPU = (Character) objectStream.readObject();
 
-    private boolean checkColumns(char mark) {
-        char[][] boardCheck = board.getBoard();
-        for (int column = 0; column < boardCheck[0].length; column++) {
-            int count = 0;
-            for (int row = 0; row < boardCheck.length; row++) {
-                if (boardCheck[row][column] == mark) {
-                    count++;
-                    if (count == winCondition) {
-                        return true;
-                    }
-                } else {
-                    count = 0;
-                }
-            }
+            objectStream.close();
+            fileStream.close();
+            ioController.loadGameSuccessMessage();
+        } catch (Exception e) {
+            ioController.loadGameErrorMessage();
         }
-        return false;
-    }
-
-    private boolean checkDiagonalsToBottomRight(char mark) {
-        char[][] boardCheck = board.getBoard();
-
-        for (int startRow = 0; startRow < boardCheck.length; startRow++) {
-            for (int startColumn = 0; startColumn < boardCheck.length; startColumn++) {
-                int count = 0;
-                for (int step = 0; step < winCondition; step++) {
-                    int currentRow = startRow + step;
-                    int currentColumn = startColumn + step;
-
-                    if (currentRow < boardCheck.length && currentColumn < boardCheck.length && boardCheck[currentRow][currentColumn] == mark) {
-                        count++;
-                        if (count == winCondition) {
-                            return true;
-                        }
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean checkDiagonalsToBottomLeft(char mark) {
-        char[][] boardCheck = board.getBoard();
-
-        for (int startRow = 0; startRow < boardCheck.length; startRow++) {
-            for (int startColumn = 0; startColumn < boardCheck.length; startColumn++) {
-                int count = 0;
-                for (int step = 0; step < winCondition; step++) {
-                    int currentRow = startRow + step;
-                    int currentColumn = startColumn - step;
-
-                    if (currentRow < boardCheck.length && currentColumn >= 0 && boardCheck[currentRow][currentColumn] == mark) {
-                        count++;
-                        if (count == winCondition) {
-                            return true;
-                        }
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     public void setBoardSize(int size) {

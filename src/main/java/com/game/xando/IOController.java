@@ -5,6 +5,16 @@ import java.util.Scanner;
 public class IOController {
     private Scanner scanner = new Scanner(System.in);
 
+    public boolean askToLoadGame() {
+        System.out.println("Czy chcesz wczytac poprzednio zapisana gre? (tak/nie)");
+        String response = scanner.next().toLowerCase();
+        while (!response.equals("tak") && !response.equals("nie")) {
+            System.out.println("Zly input - wybierz ponownie (tak/nie)");
+            response = scanner.next().toLowerCase();
+        }
+        return response.equals("tak");
+    }
+
     public void selectGameMode(Game game) {
         System.out.println("""
                 Wybierz tryb gry:
@@ -40,18 +50,18 @@ public class IOController {
         return playerOrCPU;
     }
 
-    public int selectDifficulty() {
-        int difficulty;
+    public char selectDifficulty() {
+        char difficulty;
         System.out.println("""
                 Wybierz poziom trudnosci:
                 1 - latwy
-                2 - trudny""");
+                2 - sredni""");
         do {
-            difficulty = scanner.nextInt();
-            if (difficulty != 1 && difficulty != 2) {
+            difficulty = scanner.next().charAt(0);
+            if (difficulty != '1' && difficulty != '2') {
                 System.out.println("Zly input - wybierz ponownie");
             }
-        } while (difficulty != 1 && difficulty != 2);
+        } while (difficulty != '1' && difficulty != '2');
         return difficulty;
     }
 
@@ -96,5 +106,20 @@ public class IOController {
 
     public void invalidMoveMessage() {
         System.out.println("Nieprawidlowy ruch");
+    }
+    public void saveGameSuccessMessage() {
+        System.out.println("Gra zapisana");
+    }
+
+    public void saveGameErrorMessage() {
+        System.out.println("Blad podczas zapisywania gry");
+    }
+
+    public void loadGameSuccessMessage() {
+        System.out.println("Gra zaladowana");
+    }
+
+    public void loadGameErrorMessage() {
+        System.out.println("Blad podczas zaladowania gry");
     }
 }

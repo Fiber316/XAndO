@@ -14,8 +14,7 @@ public class GameTestSuite {
     @BeforeEach
     void setUp() {
         game = new Game();
-        game.setWinCondition(3);
-        board = new Board(3);
+        board = new Board(3, 3);
         game.board = board;
     }
 
@@ -27,7 +26,7 @@ public class GameTestSuite {
         board.placeMark(0, 2, 'O');
 
         // Then
-        assertTrue(game.checkWin('O'));
+        assertTrue(board.checkWin('O'));
     }
 
     @Test
@@ -38,7 +37,7 @@ public class GameTestSuite {
         board.placeMark(2, 0, 'O');
 
         // Then
-        assertTrue(game.checkWin('O'));
+        assertTrue(board.checkWin('O'));
     }
 
     @Test
@@ -49,7 +48,7 @@ public class GameTestSuite {
         board.placeMark(2, 2, 'O');
 
         // Then
-        assertTrue(game.checkWin('O'));
+        assertTrue(board.checkWin('O'));
     }
 
     @Test
@@ -60,7 +59,7 @@ public class GameTestSuite {
         board.placeMark(0, 2, 'X');
 
         // Then
-        assertTrue(game.checkWin('X'));
+        assertTrue(board.checkWin('X'));
     }
 
     @Test
@@ -71,7 +70,7 @@ public class GameTestSuite {
         board.placeMark(2, 0, 'X');
 
         // Then
-        assertTrue(game.checkWin('X'));
+        assertTrue(board.checkWin('X'));
     }
 
     @Test
@@ -82,7 +81,7 @@ public class GameTestSuite {
         board.placeMark(2, 2, 'X');
 
         // Then
-        assertTrue(game.checkWin('X'));
+        assertTrue(board.checkWin('X'));
     }
 
     @Test
@@ -99,8 +98,8 @@ public class GameTestSuite {
         board.placeMark(2, 2, 'O');
 
         // Then
-        assertFalse(game.checkWin('X'));
-        assertFalse(game.checkWin('O'));
+        assertFalse(board.checkWin('X'));
+        assertFalse(board.checkWin('O'));
         assertTrue(board.isFull());
     }
 
